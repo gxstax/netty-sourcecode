@@ -1,7 +1,5 @@
 package com.ant.io.nio;
 
-import io.netty.buffer.ByteBuf;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
@@ -84,7 +82,7 @@ public class ScatterGatherIO {
         String bufferTwo = buffer2.asCharBuffer().toString();
         // Verification of content
         System.out.println(bufferOne);
-        System.out.println(bufferTwo);//原文出自【易百教程】，商业转载请联系作者获得授权，非商业请保留原文链接：https://www.yiibai.com/java_nio/scatter-gather-or-vectored-input-output.html#article-start
+        System.out.println(bufferTwo);
 
 
     }

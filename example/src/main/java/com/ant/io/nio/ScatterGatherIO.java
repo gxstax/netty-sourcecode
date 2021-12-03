@@ -62,7 +62,6 @@ public class ScatterGatherIO {
      * @return void
      */
     public static void scatterBytes() {
-        String relativelyPath = System.getProperty("user.dir");
         // The First Buffer is used for holding a random number
         ByteBuffer buffer1 = ByteBuffer.allocate(8);
         // The Second Buffer is used for holding a data that we want to write

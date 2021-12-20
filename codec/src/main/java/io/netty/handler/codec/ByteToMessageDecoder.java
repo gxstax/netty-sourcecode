@@ -270,6 +270,7 @@ public abstract class ByteToMessageDecoder extends ChannelInboundHandlerAdapter 
         if (msg instanceof ByteBuf) {
             CodecOutputList out = CodecOutputList.newInstance();
             try {
+                // cumulation 数据累积器
                 first = cumulation == null;
                 cumulation = cumulator.cumulate(ctx.alloc(),
                         first ? Unpooled.EMPTY_BUFFER : cumulation, (ByteBuf) msg);

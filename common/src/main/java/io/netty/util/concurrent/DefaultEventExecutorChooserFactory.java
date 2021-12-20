@@ -32,6 +32,7 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
 
     @Override
     public EventExecutorChooser newChooser(EventExecutor[] executors) {
+        // 判断执行任务长度是否是2的幂次方
         if (isPowerOfTwo(executors.length)) {
             return new PowerOfTwoEventExecutorChooser(executors);
         } else {
@@ -43,6 +44,7 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
         return (val & -val) == val;
     }
 
+    // 2的幂次方 Event执行选择器
     private static final class PowerOfTwoEventExecutorChooser implements EventExecutorChooser {
         private final AtomicInteger idx = new AtomicInteger();
         private final EventExecutor[] executors;
@@ -53,10 +55,12 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
 
         @Override
         public EventExecutor next() {
+            // 按位 & （运算效率更高）
             return executors[idx.getAndIncrement() & executors.length - 1];
         }
     }
 
+    // 通用的Event执行选择器
     private static final class GenericEventExecutorChooser implements EventExecutorChooser {
         // Use a 'long' counter to avoid non-round-robin behaviour at the 32-bit overflow boundary.
         // The 64-bit long solves this by placing the overflow so far into the future, that no system
@@ -70,6 +74,7 @@ public final class DefaultEventExecutorChooserFactory implements EventExecutorCh
 
         @Override
         public EventExecutor next() {
+            // 递增->取模->取绝对值
             return executors[(int) Math.abs(idx.getAndIncrement() % executors.length)];
         }
     }

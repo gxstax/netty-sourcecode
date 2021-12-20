@@ -50,6 +50,9 @@ import java.util.List;
  * </pre>
  */
 public class ByteArrayDecoder extends MessageToMessageDecoder<ByteBuf> {
+    /**
+     * 把 netty 的字节数组转换为 JDK 的对象数组
+     */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
          // copy the ByteBuf content to a byte array

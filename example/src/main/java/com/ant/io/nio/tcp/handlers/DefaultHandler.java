@@ -14,6 +14,7 @@ public class DefaultHandler implements ServerHandler {
 
     @Override
     public void doHandler(SelectionKey key) {
-        // TODO
+        // DoNothing
     }
+
 }

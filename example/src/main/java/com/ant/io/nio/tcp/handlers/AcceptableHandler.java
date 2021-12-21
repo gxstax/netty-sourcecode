@@ -16,13 +16,14 @@ import java.nio.channels.SocketChannel;
  * @since 2021/12/17 5:11 下午
  */
 public class AcceptableHandler implements ServerHandler {
+
     private final static int BUF_SIZE = 1024;
 
     @Override
     public void doHandler(SelectionKey key) {
         final ServerSocketChannel ssChannel = (ServerSocketChannel) key.channel();
         try {
-            final SocketChannel sc = ssChannel.accept();
+            SocketChannel sc = ssChannel.accept();
             sc.configureBlocking(false);
             sc.register(key.selector(), SelectionKey.OP_READ, ByteBuffer.allocateDirect(BUF_SIZE));
         } catch (IOException e) {

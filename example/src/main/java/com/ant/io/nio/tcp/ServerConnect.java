@@ -10,6 +10,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -23,12 +24,13 @@ public class ServerConnect {
 
     private final static int BUF_SIZE = 1024;
     private final static long TIME_OUT = 1000L;
+    public final static int SERVER_PORT = 8099;
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
+        connect();
     }
 
-    public void connect() throws IOException {
+    public static void connect() throws IOException {
         // 选择器
         Selector selector;
         // TCP 通道
@@ -38,10 +40,12 @@ public class ServerConnect {
             selector = Selector.open();
             serverSocketChannel = ServerSocketChannel.open();
 
-            serverSocketChannel.socket().bind(new InetSocketAddress("localhost", 8099));
+            serverSocketChannel.socket().bind(new InetSocketAddress("localhost", SERVER_PORT));
+            serverSocketChannel.configureBlocking(false);
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
             while (true) {
+                TimeUnit.SECONDS.sleep(1);
                 // =0 说明没有准备就绪的客户端
                 if ((selector.select(TIME_OUT) == 0)) {
                     System.out.println("未准备就绪...");
@@ -52,10 +56,16 @@ public class ServerConnect {
                 while (iterator.hasNext()) {
                     final SelectionKey key = iterator.next();
                     ServerHandler handler = ServerHandlerFactory.getHandler(key);
+
+                    // 通道处理
                     handler.doHandler(key);
+
+                    // 注意处理完就绪集合的通道后，要移除出已就绪集合
+                    iterator.remove();
                 }
+
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
